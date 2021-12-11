@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package io.taeho.ddl.services.user.v1;
+
+option go_package = "github.com/taehoio/ddl/gen/go/ddl/services/userv1";
+
+import "ddl/protobuf/v1/options.proto";
+
+message User {
+	option (ddl.protobuf.v1.datastore_type) = DATASTORE_TYPE_MYSQL;
+	option (ddl.protobuf.v1.primary_key) = "id";
+	option (ddl.protobuf.v1.index) = "idx_full_name(full_name)";
+	option (ddl.protobuf.v1.index) = "idx_email(email)";
+
+	string id = 1;
+	string password_hash = 2;
+	string full_name = 3;
+	string email = 4;
+}

@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package io.taeho.ddl.protobuf.v1;
+
+option go_package = "github.com/taehoio/ddl/gen/go/ddl/protobufv1";
+
+import "google/protobuf/descriptor.proto";
+
+enum DatastoreType {
+	DATASTORE_TYPE_UNSPECIFIED = 0;
+	DATASTORE_TYPE_SQLITE = 2;
+	DATASTORE_TYPE_MYSQL = 3;
+	DATASTORE_TYPE_POSTGRESQL = 4;
+	DATASTORE_TYPE_MSSQL = 5;
+	DATASTORE_TYPE_ORACLE = 6;
+}
+
+extend google.protobuf.MessageOptions {
+	DatastoreType datastore_type = 60001;
+	string primary_key = 60002;
+	repeated string index = 60003;
+}
+
+extend google.protobuf.FieldOptions {
+  bool key = 61001;
+}
