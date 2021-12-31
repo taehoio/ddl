@@ -17,10 +17,9 @@ enum DatastoreType {
 
 extend google.protobuf.MessageOptions {
 	DatastoreType datastore_type = 60001;
-	string primary_key = 60002;
-	repeated string index = 60003;
 }
 
 extend google.protobuf.FieldOptions {
   bool key = 61001;
+	repeated string index = 61002;
 }
