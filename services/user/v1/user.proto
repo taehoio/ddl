@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package ddl.services.user.v1;
+package services.user.v1;
 
-option go_package = "github.com/taehoio/ddl/gen/go/ddl/services/user/v1;userv1";
+option go_package = "github.com/taehoio/ddl/gen/go/services/user/v1;userv1";
 
 import "google/protobuf/timestamp.proto";
 import "ddl/protobuf/v1/options.proto";
