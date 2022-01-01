@@ -1,6 +1,6 @@
 version: v1
 plugins:
-  - remote: buf.build/library/plugins/go:v1.27.1-1
+  - name: go
     out: gen/go
     opt:
       - paths=source_relative
