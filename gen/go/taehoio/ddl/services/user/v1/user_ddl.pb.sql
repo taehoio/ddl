@@ -22,9 +22,14 @@ CREATE UNIQUE INDEX `unique_provider_identifier` ON `user` (`provider`, `identif
 
 CREATE TABLE `user_role` (
 	`id` BIGINT UNSIGNED,
+	`created_at` TIMESTAMP(6) NULL DEFAULT NULL,
+	`updated_at` TIMESTAMP(6) NULL DEFAULT NULL,
+	`deleted_at` TIMESTAMP(6) NULL DEFAULT NULL,
 	`user_id` BIGINT UNSIGNED,
 	`role` INT,
 	PRIMARY KEY (`id`)
 );
 
 CREATE INDEX `idx_user` ON `user_role` (`user_id`);
+
+CREATE UNIQUE INDEX `unique_user_id_role` ON `user_role` (`user_id`, `role`);
