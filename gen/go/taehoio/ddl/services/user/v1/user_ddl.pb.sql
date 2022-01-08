@@ -2,7 +2,7 @@
 -- versions:
 --  protoc-gen-go-ddl v0.0.1-alpha
 --  protoc            (unknown)
--- source: services/user/v1/user.proto
+-- source: taehoio/ddl/services/user/v1/user.proto
 
 CREATE TABLE `user` (
 	`id` BIGINT UNSIGNED,
