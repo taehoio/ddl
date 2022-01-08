@@ -18,6 +18,8 @@ CREATE TABLE `user` (
 
 CREATE INDEX `idx_provider_identifier` ON `user` (`provider`, `identifier`);
 
+CREATE UNIQUE INDEX `unique_provider_identifier` ON `user` (`provider`, `identifier`);
+
 CREATE TABLE `user_role` (
 	`id` BIGINT UNSIGNED,
 	`user_id` BIGINT UNSIGNED,
