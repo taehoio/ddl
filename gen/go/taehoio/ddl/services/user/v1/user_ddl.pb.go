@@ -6,11 +6,12 @@ import (
 	"github.com/xissy/kubeflake"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 type UserRecorder interface {
 	Get(db *sql.DB, id uint64) (*User, error)
-	FindOneByProvideAndIdentifier(db *sql.DB, email string) (*User, error)
+	FindOneByProvideAndIdentifier(db *sql.DB, provider Provider, identifier string) (*User, error)
 	Save(db *sql.DB) error
 }
 
@@ -26,6 +27,7 @@ func (u *User) Get(db *sql.DB, id uint64) (*User, error) {
 	var createdAt sql.NullTime
 	var updatedAt sql.NullTime
 	var deletedAt sql.NullTime
+	var passwordHash sql.NullString
 
 	if err = stmt.QueryRow(id).Scan(
 		&uu.Id,
@@ -34,7 +36,7 @@ func (u *User) Get(db *sql.DB, id uint64) (*User, error) {
 		&deletedAt,
 		&uu.Provider,
 		&uu.Identifier,
-		&uu.PasswordHash,
+		&passwordHash,
 		&uu.Nickname,
 	); err != nil {
 		return nil, err
@@ -49,11 +51,14 @@ func (u *User) Get(db *sql.DB, id uint64) (*User, error) {
 	if deletedAt.Valid {
 		uu.DeletedAt = timestamppb.New(deletedAt.Time)
 	}
+	if passwordHash.Valid {
+		uu.PasswordHash = &wrapperspb.StringValue{Value: passwordHash.String}
+	}
 
 	return &uu, nil
 }
 
-func (u *User) FindOneByProvideAndIdentifier(db *sql.DB, email string) (*User, error) {
+func (u *User) FindOneByProvideAndIdentifier(db *sql.DB, provider Provider, identifier string) (*User, error) {
 	stmt, err := db.Prepare("SELECT * FROM user WHERE provider=? AND identifier=?")
 	if err != nil {
 		return nil, err
@@ -66,7 +71,7 @@ func (u *User) FindOneByProvideAndIdentifier(db *sql.DB, email string) (*User, e
 	var updatedAt sql.NullTime
 	var deletedAt sql.NullTime
 
-	if err = stmt.QueryRow(email).Scan(
+	if err = stmt.QueryRow(provider.Number(), identifier).Scan(
 		&uu.Id,
 		&createdAt,
 		&updatedAt,
