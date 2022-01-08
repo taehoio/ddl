@@ -1,4 +1,4 @@
-package userv1
+package userddlv1
 
 import (
 	"database/sql"
