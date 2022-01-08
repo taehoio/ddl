@@ -24,12 +24,12 @@ message User {
 	google.protobuf.Timestamp deleted_at = 4;
 
 	Provider provider = 5 [
-		(ddl.protobuf.v1.unique) = "name=unique_provider_identifier",
-		(ddl.protobuf.v1.index) = "name=idx_provider_identifier"
+		(ddl.protobuf.v1.index) = "name=idx_provider_identifier",
+		(ddl.protobuf.v1.unique) = "name=unique_provider_identifier"
 	];
 	string identifier = 6 [
-		(ddl.protobuf.v1.unique) = "name=unique_provider_identifier",
-		(ddl.protobuf.v1.index) = "name=idx_provider_identifier"
+		(ddl.protobuf.v1.index) = "name=idx_provider_identifier",
+		(ddl.protobuf.v1.unique) = "name=unique_provider_identifier"
 	];
 	google.protobuf.StringValue password_hash = 7;
 	string nickname = 8;
@@ -46,6 +46,15 @@ message UserRole {
 
 	uint64 id = 1 [(ddl.protobuf.v1.key) = true];
 
-	uint64 user_id = 2 [(ddl.protobuf.v1.index) = "name=idx_user"];
-	Role role = 3;
+	google.protobuf.Timestamp created_at = 2;
+	google.protobuf.Timestamp updated_at = 3;
+	google.protobuf.Timestamp deleted_at = 4;
+
+	uint64 user_id = 5 [
+		(ddl.protobuf.v1.index) = "name=idx_user",
+		(ddl.protobuf.v1.unique) = "name=unique_user_id_role"
+	];
+	Role role = 6 [
+		(ddl.protobuf.v1.unique) = "name=unique_user_id_role"
+	];
 }
