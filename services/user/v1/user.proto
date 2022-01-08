@@ -7,7 +7,7 @@ option go_package = "github.com/taehoio/ddl/gen/go/services/user/v1;userddlv1";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 
-import "protobuf/v1/options.proto";
+import "ddl/protobuf/v1/options.proto";
 
 enum Provider {
 	PROVIDER_UNSPECIFIED = 0;
