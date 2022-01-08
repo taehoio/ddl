@@ -2,12 +2,12 @@ syntax = "proto3";
 
 package taehoio.ddl.services.user.v1;
 
-option go_package = "github.com/taehoio/ddl/gen/go/services/user/v1;userddlv1";
+option go_package = "github.com/taehoio/ddl/gen/go/taehoio/ddl/services/user/v1;userddlv1";
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 
-import "ddl/protobuf/v1/options.proto";
+import "taehoio/ddl/protobuf/v1/options.proto";
 
 enum Provider {
 	PROVIDER_UNSPECIFIED = 0;
