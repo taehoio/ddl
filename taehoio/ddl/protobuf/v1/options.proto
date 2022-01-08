@@ -22,4 +22,5 @@ extend google.protobuf.MessageOptions {
 extend google.protobuf.FieldOptions {
 	bool key = 61001;
 	repeated string index = 61002;
+	repeated string unique = 61003;
 }
