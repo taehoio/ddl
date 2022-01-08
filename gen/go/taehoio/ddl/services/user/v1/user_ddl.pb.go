@@ -79,7 +79,7 @@ func (u *User) FindOneByProvideAndIdentifier(db *sql.DB, provider Provider, iden
 		&deletedAt,
 		&uu.Provider,
 		&uu.Identifier,
-		&uu.PasswordHash,
+		&passwordHash,
 		&uu.Nickname,
 	); err != nil {
 		return nil, err
