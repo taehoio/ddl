@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package ddl.protobuf.v1;
+package taehoio.ddl.protobuf.v1;
 
 option go_package = "github.com/taehoio/ddl/gen/go/ddl/protobuf/v1;protobufv1";
 

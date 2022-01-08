@@ -2,4 +2,4 @@
 -- versions:
 --  protoc-gen-go-ddl v0.0.1-alpha
 --  protoc            (unknown)
--- source: ddl/protobuf/v1/options.proto
+-- source: protobuf/v1/options.proto
