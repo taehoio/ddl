@@ -4,15 +4,25 @@
 --  protoc            (unknown)
 -- source: services/user/v1/user.proto
 
-CREATE TABLE user (
-	id BIGINT UNSIGNED,
-	created_at TIMESTAMP(6) NULL DEFAULT NULL,
-	updated_at TIMESTAMP(6) NULL DEFAULT NULL,
-	deleted_at TIMESTAMP(6) NULL DEFAULT NULL,
-	password_hash VARCHAR(255),
-	full_name VARCHAR(255),
-	email VARCHAR(255),
-	PRIMARY KEY (id)
+CREATE TABLE `user` (
+	`id` BIGINT UNSIGNED,
+	`created_at` TIMESTAMP(6) NULL DEFAULT NULL,
+	`updated_at` TIMESTAMP(6) NULL DEFAULT NULL,
+	`deleted_at` TIMESTAMP(6) NULL DEFAULT NULL,
+	`provider` INT,
+	`identifier` VARCHAR(255),
+	`password_hash` VARCHAR(255),
+	`nickname` VARCHAR(255),
+	PRIMARY KEY (`id`)
 );
 
-CREATE INDEX idx_email ON user (email);
+CREATE INDEX `idx_provider_identifier` ON `user` (`provider`, `identifier`);
+
+CREATE TABLE `user_role` (
+	`id` BIGINT UNSIGNED,
+	`user_id` BIGINT UNSIGNED,
+	`role` INT,
+	PRIMARY KEY (`id`)
+);
+
+CREATE INDEX `idx_user` ON `user_role` (`user_id`);
