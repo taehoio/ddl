@@ -2,11 +2,42 @@ package userddlv1
 
 import (
 	"database/sql"
+	"errors"
+	"strings"
 
 	"github.com/xissy/kubeflake"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
+)
+
+var (
+	ErrDuplicatedEntry = errors.New("duplicated entry")
+)
+
+const (
+	insertStmt = `
+		INSERT INTO user (
+			id,
+			created_at,
+			updated_at,
+			deleted_at,
+			provider,
+			identifier,
+			password_hash,
+			nickname
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+
+	updateStmt = `
+		UPDATE user SET
+			created_at=?,
+			updated_at=?,
+			deleted_at=?,
+			provider=?,
+			identifier=?,
+			password_hash=?,
+			nickname=?
+		WHERE id=?`
 )
 
 type UserRecorder interface {
@@ -106,39 +137,48 @@ func (u *User) Save(db *sql.DB) error {
 		u.Id = kubeflake.Must(kubeflake.New())
 	}
 
-	currentAt := timestamppb.Now()
-
-	createdAt := u.CreatedAt
-	if createdAt == nil {
-		createdAt = currentAt
+	shouldInsert := true
+	uu, err := u.Get(db, u.Id)
+	if err != nil && err != sql.ErrNoRows {
+		return err
+	}
+	if uu != nil {
+		shouldInsert = false
 	}
 
-	updatedAt := currentAt
+	if shouldInsert {
+		if err := u.insert(db); err != nil {
+			return err
+		}
+	} else {
+		if err := u.update(db); err != nil {
+			return err
+		}
+	}
+
+	uu, err = u.Get(db, u.Id)
+	if err != nil {
+		return err
+	}
+
+	proto.Merge(u, uu)
+
+	return nil
+}
+
+func (u *User) insert(db *sql.DB) error {
+	currentAt := timestamppb.Now()
 
 	var passwordHash sql.NullString
 	if u.PasswordHash != nil {
 		passwordHash.Scan(u.PasswordHash.GetValue())
 	}
 
-	_, err := db.Exec(`INSERT INTO user (
-			id, 
-			created_at, 
-			updated_at, 
-			deleted_at, 
-			provider,
-			identifier,
-			password_hash, 
-			nickname
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-		ON DUPLICATE KEY UPDATE    
-			updated_at=VALUES(updated_at),
-			provider=VALUES(provider),
-			identifier=VALUES(identifier),
-			password_hash=VALUES(password_hash),
-			nickname=VALUES(nickname)`,
+	_, err := db.Exec(
+		insertStmt,
 		u.Id,
-		createdAt.AsTime(),
-		updatedAt.AsTime(),
+		currentAt.AsTime(),
+		currentAt.AsTime(),
 		nil,
 		u.Provider.Number(),
 		u.Identifier,
@@ -146,15 +186,37 @@ func (u *User) Save(db *sql.DB) error {
 		u.Nickname,
 	)
 	if err != nil {
+		if strings.HasPrefix(err.Error(), "Error 1062: Duplicate entry") {
+			return ErrDuplicatedEntry
+		}
 		return err
 	}
 
-	uu, err := u.Get(db, u.Id)
+	return nil
+}
+
+func (u *User) update(db *sql.DB) error {
+	currentAt := timestamppb.Now()
+
+	var passwordHash sql.NullString
+	if u.PasswordHash != nil {
+		passwordHash.Scan(u.PasswordHash.GetValue())
+	}
+
+	_, err := db.Exec(
+		updateStmt,
+		u.CreatedAt.AsTime(),
+		currentAt.AsTime(),
+		nil,
+		u.Provider.Number(),
+		u.Identifier,
+		passwordHash,
+		u.Nickname,
+		u.Id,
+	)
 	if err != nil {
 		return err
 	}
-
-	proto.Merge(u, uu)
 
 	return nil
 }
