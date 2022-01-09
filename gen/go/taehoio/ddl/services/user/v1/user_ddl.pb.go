@@ -70,6 +70,9 @@ func (u *User) Get(db *sql.DB, id uint64) (*User, error) {
 		&passwordHash,
 		&uu.Nickname,
 	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
 
@@ -113,6 +116,9 @@ func (u *User) FindOneByProvideAndIdentifier(db *sql.DB, provider Provider, iden
 		&passwordHash,
 		&uu.Nickname,
 	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
 
