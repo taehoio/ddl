@@ -5,7 +5,7 @@ install-dependencies:
 		github.com/bufbuild/buf/cmd/protoc-gen-buf-breaking@v1.0.0-rc10 \
 		github.com/bufbuild/buf/cmd/protoc-gen-buf-lint@v1.0.0-rc10
 	@go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.27.1
-	@go install github.com/taehoio/protoc-gen-go-ddl@3f9f14b80a6961a81fb12f90ad45e0628c941072
+	@go install github.com/taehoio/protoc-gen-go-ddl@ef036bc1cdac12979e87159514f477192e865116
 
 .PHONY: lint
 lint: install-dependencies
