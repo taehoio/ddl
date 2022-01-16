@@ -2,7 +2,6 @@ package userddlv1
 
 import (
 	"database/sql"
-	"errors"
 	"strings"
 
 	"github.com/xissy/kubeflake"
@@ -191,7 +190,7 @@ func (m *User) insert(db *sql.DB) error {
 	)
 	if err != nil {
 		if strings.HasPrefix(err.Error(), "Error 1062: Duplicate entry") {
-			return errors.New("duplicated entry")
+			return ErrDuplicateEntry
 		}
 		return err
 	}
