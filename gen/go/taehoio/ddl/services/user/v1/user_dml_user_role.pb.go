@@ -23,7 +23,8 @@ const (
 	userRoleUpdateStmt = `
 		UPDATE user_role SET
 			id = ?, created_at = ?, updated_at = ?, deleted_at = ?, user_id = ?, role = ?
-		WHERE id = ?
+		WHERE
+			id = ?
 	`
 )
 
@@ -35,12 +36,7 @@ var (
 type UserRoleRecorder interface {
 	Get(db *sql.DB, id uint64) (*UserRole, error)
 	Save(db *sql.DB) error
-
-	FindOneByUserId(
-		db *sql.DB,
-
-		user_id interface{},
-	) (*UserRole, error)
+	FindOneByUserId(db *sql.DB, user_id interface{}) (*UserRole, error)
 }
 
 func (m *UserRole) Get(db *sql.DB, id uint64) (*UserRole, error) {
@@ -53,23 +49,15 @@ func (m *UserRole) Get(db *sql.DB, id uint64) (*UserRole, error) {
 	var mm UserRole
 
 	var createdAt sql.NullTime
-
 	var updatedAt sql.NullTime
-
 	var deletedAt sql.NullTime
 
 	if err = stmt.QueryRow(id).Scan(
-
 		&mm.Id,
-
 		&createdAt,
-
 		&updatedAt,
-
 		&deletedAt,
-
 		&mm.UserId,
-
 		&mm.Role,
 	); err != nil {
 		if err == sql.ErrNoRows {
@@ -79,31 +67,19 @@ func (m *UserRole) Get(db *sql.DB, id uint64) (*UserRole, error) {
 	}
 
 	if createdAt.Valid {
-
 		mm.CreatedAt = timestamppb.New(createdAt.Time)
-
 	}
-
 	if updatedAt.Valid {
-
 		mm.UpdatedAt = timestamppb.New(updatedAt.Time)
-
 	}
-
 	if deletedAt.Valid {
-
 		mm.DeletedAt = timestamppb.New(deletedAt.Time)
-
 	}
 
 	return &mm, nil
 }
 
-func (m *UserRole) FindOneByUserId(
-	db *sql.DB,
-
-	user_id interface{},
-) (*UserRole, error) {
+func (m *UserRole) FindOneByUserId(db *sql.DB, user_id interface{}) (*UserRole, error) {
 	stmt, err := db.Prepare("SELECT * FROM user_role WHERE user_id=?")
 	if err != nil {
 		return nil, err
@@ -113,23 +89,15 @@ func (m *UserRole) FindOneByUserId(
 	var mm UserRole
 
 	var createdAt sql.NullTime
-
 	var updatedAt sql.NullTime
-
 	var deletedAt sql.NullTime
 
 	if err = stmt.QueryRow(user_id).Scan(
-
 		&mm.Id,
-
 		&createdAt,
-
 		&updatedAt,
-
 		&deletedAt,
-
 		&mm.UserId,
-
 		&mm.Role,
 	); err != nil {
 		if err == sql.ErrNoRows {
@@ -139,21 +107,15 @@ func (m *UserRole) FindOneByUserId(
 	}
 
 	if createdAt.Valid {
-
 		mm.CreatedAt = timestamppb.New(createdAt.Time)
-
 	}
 
 	if updatedAt.Valid {
-
 		mm.UpdatedAt = timestamppb.New(updatedAt.Time)
-
 	}
 
 	if deletedAt.Valid {
-
 		mm.DeletedAt = timestamppb.New(deletedAt.Time)
-
 	}
 
 	return &mm, nil
@@ -198,17 +160,11 @@ func (m *UserRole) insert(db *sql.DB) error {
 
 	_, err := db.Exec(
 		userRoleInsertStmt,
-
 		m.Id,
-
 		currentAt.AsTime(),
-
 		currentAt.AsTime(),
-
 		nil,
-
 		m.UserId,
-
 		m.Role,
 	)
 	if err != nil {
@@ -226,19 +182,12 @@ func (m *UserRole) update(db *sql.DB) error {
 
 	_, err := db.Exec(
 		userRoleUpdateStmt,
-
 		m.Id,
-
 		currentAt.AsTime(),
-
 		currentAt.AsTime(),
-
 		nil,
-
 		m.UserId,
-
 		m.Role,
-
 		m.Id,
 	)
 	if err != nil {
