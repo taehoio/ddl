@@ -27,6 +27,11 @@ const (
 	`
 )
 
+var (
+	_ = timestamppb.Timestamp{}
+	_ = wrapperspb.Int32Value{}
+)
+
 type UserRecorder interface {
 	Get(db *sql.DB, id uint64) (*User, error)
 	Save(db *sql.DB) error
