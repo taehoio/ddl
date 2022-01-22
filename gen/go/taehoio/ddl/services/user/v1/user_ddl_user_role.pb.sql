@@ -4,22 +4,6 @@
 --  protoc            (unknown)
 -- source: taehoio/ddl/services/user/v1/user.proto
 
-CREATE TABLE `user` (
-	`id` BIGINT UNSIGNED,
-	`created_at` TIMESTAMP(6) NULL DEFAULT NULL,
-	`updated_at` TIMESTAMP(6) NULL DEFAULT NULL,
-	`deleted_at` TIMESTAMP(6) NULL DEFAULT NULL,
-	`provider` INT,
-	`identifier` VARCHAR(255),
-	`password_hash` VARCHAR(255),
-	`nickname` VARCHAR(255),
-	PRIMARY KEY (`id`)
-);
-
-CREATE INDEX `idx_provider_identifier` ON `user` (`provider`, `identifier`);
-
-CREATE UNIQUE INDEX `unique_provider_identifier` ON `user` (`provider`, `identifier`);
-
 CREATE TABLE `user_role` (
 	`id` BIGINT UNSIGNED,
 	`created_at` TIMESTAMP(6) NULL DEFAULT NULL,
