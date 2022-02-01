@@ -90,6 +90,155 @@ func (m *User) Get(db *sql.DB, id uint64) (*User, error) {
 	return &mm, nil
 }
 
+func (m *User) List(db *sql.DB, lastID *wrapperspb.UInt64Value, asc bool, limit int64) ([]*User, error) {
+	q := "SELECT * FROM user"
+	if lastID != nil {
+		if asc {
+			q += " WHERE id > ?"
+		} else {
+			q += " WHERE id < ?"
+		}
+	}
+	if asc {
+		q += " ORDER BY id ASC"
+	} else {
+		q += " ORDER BY id DESC"
+	}
+	q += " LIMIT ?"
+
+	stmt, err := db.Prepare(q)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	var args []interface{}
+	if lastID != nil {
+		args = append(args, lastID.Value)
+	}
+	args = append(args, limit)
+
+	rows, err := stmt.Query(args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var arr []*User
+
+	for rows.Next() {
+		var mm User
+
+		var createdAt sql.NullTime
+		var updatedAt sql.NullTime
+		var deletedAt sql.NullTime
+		var passwordHash sql.NullString
+
+		if err = rows.Scan(
+			&mm.Id,
+			&createdAt,
+			&updatedAt,
+			&deletedAt,
+			&mm.Provider,
+			&mm.Identifier,
+			&passwordHash,
+			&mm.Nickname,
+		); err != nil {
+			return nil, err
+		}
+
+		if createdAt.Valid {
+			mm.CreatedAt = timestamppb.New(createdAt.Time)
+		}
+		if updatedAt.Valid {
+			mm.UpdatedAt = timestamppb.New(updatedAt.Time)
+		}
+		if deletedAt.Valid {
+			mm.DeletedAt = timestamppb.New(deletedAt.Time)
+		}
+		if passwordHash.Valid {
+			mm.PasswordHash = &wrapperspb.StringValue{Value: passwordHash.String}
+		}
+
+		arr = append(arr, &mm)
+	}
+
+	return arr, nil
+}
+
+func (m *User) FindByIDs(db *sql.DB, ids []uint64) ([]*User, error) {
+	if len(ids) == 0 {
+		return nil, nil
+	}
+
+	q := "SELECT * FROM user WHERE id IN ("
+	for i := range ids {
+		if i > 0 {
+			q += ", "
+		}
+		q += "?"
+	}
+	q += ")"
+
+	stmt, err := db.Prepare(q)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	var args []interface{}
+	for _, id := range ids {
+		args = append(args, id)
+	}
+
+	rows, err := stmt.Query(args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var arr []*User
+
+	for rows.Next() {
+		var mm User
+
+		var createdAt sql.NullTime
+		var updatedAt sql.NullTime
+		var deletedAt sql.NullTime
+		var passwordHash sql.NullString
+
+		if err = rows.Scan(
+			&mm.Id,
+			&createdAt,
+			&updatedAt,
+			&deletedAt,
+			&mm.Provider,
+			&mm.Identifier,
+			&passwordHash,
+			&mm.Nickname,
+		); err != nil {
+			return nil, err
+		}
+
+		if createdAt.Valid {
+			mm.CreatedAt = timestamppb.New(createdAt.Time)
+		}
+		if updatedAt.Valid {
+			mm.UpdatedAt = timestamppb.New(updatedAt.Time)
+		}
+		if deletedAt.Valid {
+			mm.DeletedAt = timestamppb.New(deletedAt.Time)
+		}
+		if passwordHash.Valid {
+			mm.PasswordHash = &wrapperspb.StringValue{Value: passwordHash.String}
+		}
+
+		arr = append(arr, &mm)
+	}
+
+	return arr, nil
+}
+
 func (m *User) FindOneByProviderAndIdentifier(db *sql.DB, provider interface{}, identifier interface{}) (*User, error) {
 	stmt, err := db.Prepare("SELECT * FROM user WHERE provider=? AND identifier=?")
 	if err != nil {
