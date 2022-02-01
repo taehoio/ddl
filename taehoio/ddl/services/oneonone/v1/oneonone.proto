@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package taehoio.ddl.services.oneonone.v1;
+
+option go_package = "github.com/taehoio/ddl/gen/go/taehoio/ddl/services/v1/oneonone;oneononeddlv1";
+
+import "google/protobuf/timestamp.proto";
+
+import "taehoio/ddl/protobuf/v1/options.proto";
+
+message Category {
+	option (ddl.protobuf.v1.datastore_type) = DATASTORE_TYPE_MYSQL;
+
+	uint64 id = 1 [(ddl.protobuf.v1.key) = true];
+
+	google.protobuf.Timestamp created_at = 2;
+	google.protobuf.Timestamp updated_at = 3;
+	google.protobuf.Timestamp deleted_at = 4;
+
+	string name = 5;
+}
+
+message Question {
+	option (ddl.protobuf.v1.datastore_type) = DATASTORE_TYPE_MYSQL;
+
+	uint64 id = 1 [(ddl.protobuf.v1.key) = true];
+
+	google.protobuf.Timestamp created_at = 2;
+	google.protobuf.Timestamp updated_at = 3;
+	google.protobuf.Timestamp deleted_at = 4;
+
+	string question = 5;
+}
+
+message CategoryQuestion {
+	option (ddl.protobuf.v1.datastore_type) = DATASTORE_TYPE_MYSQL;
+
+	uint64 id = 1 [(ddl.protobuf.v1.key) = true];
+
+	google.protobuf.Timestamp created_at = 2;
+	google.protobuf.Timestamp updated_at = 3;
+	google.protobuf.Timestamp deleted_at = 4;
+
+	uint64 category_id = 5  [
+		(ddl.protobuf.v1.index) = "name=idx_category_id",
+		(ddl.protobuf.v1.unique) = "name=unique_category_id_question_id"
+	];
+	uint64 question_id = 6 [
+		(ddl.protobuf.v1.unique) = "name=unique_category_id_question_id"
+	];
+}
