@@ -82,6 +82,141 @@ func (m *Category) Get(db *sql.DB, id uint64) (*Category, error) {
 	return &mm, nil
 }
 
+func (m *Category) List(db *sql.DB, lastID *wrapperspb.UInt64Value, asc bool, limit int64) ([]*Category, error) {
+	q := "SELECT * FROM category"
+	if lastID != nil {
+		if asc {
+			q += " WHERE id > ?"
+		} else {
+			q += " WHERE id < ?"
+		}
+	}
+	if asc {
+		q += " ORDER BY id ASC"
+	} else {
+		q += " ORDER BY id DESC"
+	}
+	q += " LIMIT ?"
+
+	stmt, err := db.Prepare(q)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	var args []interface{}
+	if lastID != nil {
+		args = append(args, lastID.Value)
+	}
+	args = append(args, limit)
+
+	rows, err := stmt.Query(args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var arr []*Category
+
+	for rows.Next() {
+		var mm Category
+
+		var createdAt sql.NullTime
+		var updatedAt sql.NullTime
+		var deletedAt sql.NullTime
+
+		if err = rows.Scan(
+			&mm.Id,
+			&createdAt,
+			&updatedAt,
+			&deletedAt,
+			&mm.Name,
+		); err != nil {
+			return nil, err
+		}
+
+		if createdAt.Valid {
+			mm.CreatedAt = timestamppb.New(createdAt.Time)
+		}
+		if updatedAt.Valid {
+			mm.UpdatedAt = timestamppb.New(updatedAt.Time)
+		}
+		if deletedAt.Valid {
+			mm.DeletedAt = timestamppb.New(deletedAt.Time)
+		}
+
+		arr = append(arr, &mm)
+	}
+
+	return arr, nil
+}
+
+func (m *Category) FindByIDs(db *sql.DB, ids []uint64) ([]*Category, error) {
+	if len(ids) == 0 {
+		return nil, nil
+	}
+
+	q := "SELECT * FROM category WHERE id IN ("
+	for i := range ids {
+		if i > 0 {
+			q += ", "
+		}
+		q += "?"
+	}
+	q += ")"
+
+	stmt, err := db.Prepare(q)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	var args []interface{}
+	for _, id := range ids {
+		args = append(args, id)
+	}
+
+	rows, err := stmt.Query(args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var arr []*Category
+
+	for rows.Next() {
+		var mm Category
+
+		var createdAt sql.NullTime
+		var updatedAt sql.NullTime
+		var deletedAt sql.NullTime
+
+		if err = rows.Scan(
+			&mm.Id,
+			&createdAt,
+			&updatedAt,
+			&deletedAt,
+			&mm.Name,
+		); err != nil {
+			return nil, err
+		}
+
+		if createdAt.Valid {
+			mm.CreatedAt = timestamppb.New(createdAt.Time)
+		}
+		if updatedAt.Valid {
+			mm.UpdatedAt = timestamppb.New(updatedAt.Time)
+		}
+		if deletedAt.Valid {
+			mm.DeletedAt = timestamppb.New(deletedAt.Time)
+		}
+
+		arr = append(arr, &mm)
+	}
+
+	return arr, nil
+}
+
 func (m *Category) Save(db *sql.DB) error {
 	if m.Id == 0 {
 		m.Id = kubeflake.Must(kubeflake.New())
