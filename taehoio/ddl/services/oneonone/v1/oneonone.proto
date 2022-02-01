@@ -5,7 +5,6 @@ package taehoio.ddl.services.oneonone.v1;
 option go_package = "github.com/taehoio/ddl/gen/go/taehoio/ddl/services/v1/oneonone;oneononeddlv1";
 
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/wrappers.proto";
 
 import "taehoio/ddl/protobuf/v1/options.proto";
 
