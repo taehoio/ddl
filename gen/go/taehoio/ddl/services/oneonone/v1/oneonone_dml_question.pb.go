@@ -16,6 +16,8 @@ import (
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
+//go:generate mockgen -package oneononeddlv1 -self_package "github.com/taehoio/ddl/gen/go/taehoio/ddl/services/oneonone/v1" -source ./oneonone_dml_question.pb.go -destination ./oneonone_dml_question_mock.pb.go -mock_names QuestionRecorder=MockQuestionRecorder "github.com/taehoio/ddl/gen/go/taehoio/ddl/services/oneonone/v1" QuestionRecorder
+
 const (
 	questionInsertStmt = `
 		INSERT INTO question (
@@ -40,6 +42,7 @@ var (
 
 type QuestionRecorder interface {
 	Get(db *sql.DB, id uint64) (*Question, error)
+	List(db *sql.DB, lastID *wrapperspb.UInt64Value, asc bool, limit int64) ([]*Question, error)
 	Save(db *sql.DB) error
 }
 

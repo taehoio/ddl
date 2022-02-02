@@ -16,6 +16,8 @@ import (
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
+//go:generate mockgen -package oneononeddlv1 -self_package "github.com/taehoio/ddl/gen/go/taehoio/ddl/services/oneonone/v1" -source ./oneonone_dml_category.pb.go -destination ./oneonone_dml_category_mock.pb.go -mock_names CategoryRecorder=MockCategoryRecorder "github.com/taehoio/ddl/gen/go/taehoio/ddl/services/oneonone/v1" CategoryRecorder
+
 const (
 	categoryInsertStmt = `
 		INSERT INTO category (
@@ -40,6 +42,7 @@ var (
 
 type CategoryRecorder interface {
 	Get(db *sql.DB, id uint64) (*Category, error)
+	List(db *sql.DB, lastID *wrapperspb.UInt64Value, asc bool, limit int64) ([]*Category, error)
 	Save(db *sql.DB) error
 }
 
