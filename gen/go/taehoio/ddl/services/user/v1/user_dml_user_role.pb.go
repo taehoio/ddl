@@ -16,6 +16,8 @@ import (
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
+//go:generate mockgen -package userddlv1 -self_package "github.com/taehoio/ddl/gen/go/taehoio/ddl/services/user/v1" -source ./user_dml_user_role.pb.go -destination ./user_dml_user_role_mock.pb.go -mock_names UserRoleRecorder=MockUserRoleRecorder "github.com/taehoio/ddl/gen/go/taehoio/ddl/services/user/v1" UserRoleRecorder
+
 const (
 	userRoleInsertStmt = `
 		INSERT INTO user_role (
@@ -40,8 +42,11 @@ var (
 
 type UserRoleRecorder interface {
 	Get(db *sql.DB, id uint64) (*UserRole, error)
+	List(db *sql.DB, lastID *wrapperspb.UInt64Value, asc bool, limit int64) ([]*UserRole, error)
+	FindByIDs(db *sql.DB, ids []uint64) ([]*UserRole, error)
 	Save(db *sql.DB) error
-	FindOneByUserId(db *sql.DB, UserId interface{}) (*UserRole, error)
+	FindOneByUserId(db *sql.DB, userId interface{}) (*UserRole, error)
+	FindByUserId(db *sql.DB, userId interface{}) ([]*UserRole, error)
 }
 
 func (m *UserRole) Get(db *sql.DB, id uint64) (*UserRole, error) {

@@ -16,6 +16,8 @@ import (
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
+//go:generate mockgen -package userddlv1 -self_package "github.com/taehoio/ddl/gen/go/taehoio/ddl/services/user/v1" -source ./user_dml_user.pb.go -destination ./user_dml_user_mock.pb.go -mock_names UserRecorder=MockUserRecorder "github.com/taehoio/ddl/gen/go/taehoio/ddl/services/user/v1" UserRecorder
+
 const (
 	userInsertStmt = `
 		INSERT INTO user (
@@ -40,8 +42,11 @@ var (
 
 type UserRecorder interface {
 	Get(db *sql.DB, id uint64) (*User, error)
+	List(db *sql.DB, lastID *wrapperspb.UInt64Value, asc bool, limit int64) ([]*User, error)
+	FindByIDs(db *sql.DB, ids []uint64) ([]*User, error)
 	Save(db *sql.DB) error
-	FindOneByProviderAndIdentifier(db *sql.DB, Provider interface{}, Identifier interface{}) (*User, error)
+	FindOneByProviderAndIdentifier(db *sql.DB, provider interface{}, identifier interface{}) (*User, error)
+	FindByProviderAndIdentifier(db *sql.DB, provider interface{}, identifier interface{}) ([]*User, error)
 }
 
 func (m *User) Get(db *sql.DB, id uint64) (*User, error) {
