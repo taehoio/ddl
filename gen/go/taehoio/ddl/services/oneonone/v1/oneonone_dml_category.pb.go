@@ -43,6 +43,7 @@ var (
 type CategoryRecorder interface {
 	Get(db *sql.DB, id uint64) (*Category, error)
 	List(db *sql.DB, lastID *wrapperspb.UInt64Value, asc bool, limit int64) ([]*Category, error)
+	FindByIDs(db *sql.DB, ids []uint64) ([]*Category, error)
 	Save(db *sql.DB) error
 }
 

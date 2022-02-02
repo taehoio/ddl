@@ -43,9 +43,10 @@ var (
 type UserRoleRecorder interface {
 	Get(db *sql.DB, id uint64) (*UserRole, error)
 	List(db *sql.DB, lastID *wrapperspb.UInt64Value, asc bool, limit int64) ([]*UserRole, error)
+	FindByIDs(db *sql.DB, ids []uint64) ([]*UserRole, error)
 	Save(db *sql.DB) error
-	FindOneByUserId(db *sql.DB, UserId interface{}) (*UserRole, error)
-	FindByUserId(db *sql.DB, UserId interface{}) ([]*UserRole, error)
+	FindOneByUserId(db *sql.DB, userId interface{}) (*UserRole, error)
+	FindByUserId(db *sql.DB, userId interface{}) ([]*UserRole, error)
 }
 
 func (m *UserRole) Get(db *sql.DB, id uint64) (*UserRole, error) {

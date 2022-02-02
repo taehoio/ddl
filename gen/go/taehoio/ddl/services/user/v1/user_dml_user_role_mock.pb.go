@@ -35,34 +35,49 @@ func (m *MockUserRoleRecorder) EXPECT() *MockUserRoleRecorderMockRecorder {
 	return m.recorder
 }
 
-// FindByUserId mocks base method.
-func (m *MockUserRoleRecorder) FindByUserId(db *sql.DB, UserId interface{}) ([]*UserRole, error) {
+// FindByIDs mocks base method.
+func (m *MockUserRoleRecorder) FindByIDs(db *sql.DB, ids []uint64) ([]*UserRole, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByUserId", db, UserId)
+	ret := m.ctrl.Call(m, "FindByIDs", db, ids)
+	ret0, _ := ret[0].([]*UserRole)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindByIDs indicates an expected call of FindByIDs.
+func (mr *MockUserRoleRecorderMockRecorder) FindByIDs(db, ids interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByIDs", reflect.TypeOf((*MockUserRoleRecorder)(nil).FindByIDs), db, ids)
+}
+
+// FindByUserId mocks base method.
+func (m *MockUserRoleRecorder) FindByUserId(db *sql.DB, userId interface{}) ([]*UserRole, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindByUserId", db, userId)
 	ret0, _ := ret[0].([]*UserRole)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindByUserId indicates an expected call of FindByUserId.
-func (mr *MockUserRoleRecorderMockRecorder) FindByUserId(db, UserId interface{}) *gomock.Call {
+func (mr *MockUserRoleRecorderMockRecorder) FindByUserId(db, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByUserId", reflect.TypeOf((*MockUserRoleRecorder)(nil).FindByUserId), db, UserId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByUserId", reflect.TypeOf((*MockUserRoleRecorder)(nil).FindByUserId), db, userId)
 }
 
 // FindOneByUserId mocks base method.
-func (m *MockUserRoleRecorder) FindOneByUserId(db *sql.DB, UserId interface{}) (*UserRole, error) {
+func (m *MockUserRoleRecorder) FindOneByUserId(db *sql.DB, userId interface{}) (*UserRole, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOneByUserId", db, UserId)
+	ret := m.ctrl.Call(m, "FindOneByUserId", db, userId)
 	ret0, _ := ret[0].(*UserRole)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindOneByUserId indicates an expected call of FindOneByUserId.
-func (mr *MockUserRoleRecorderMockRecorder) FindOneByUserId(db, UserId interface{}) *gomock.Call {
+func (mr *MockUserRoleRecorderMockRecorder) FindOneByUserId(db, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOneByUserId", reflect.TypeOf((*MockUserRoleRecorder)(nil).FindOneByUserId), db, UserId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOneByUserId", reflect.TypeOf((*MockUserRoleRecorder)(nil).FindOneByUserId), db, userId)
 }
 
 // Get mocks base method.

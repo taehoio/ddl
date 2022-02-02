@@ -43,9 +43,10 @@ var (
 type CategoryQuestionRecorder interface {
 	Get(db *sql.DB, id uint64) (*CategoryQuestion, error)
 	List(db *sql.DB, lastID *wrapperspb.UInt64Value, asc bool, limit int64) ([]*CategoryQuestion, error)
+	FindByIDs(db *sql.DB, ids []uint64) ([]*CategoryQuestion, error)
 	Save(db *sql.DB) error
-	FindOneByCategoryId(db *sql.DB, CategoryId interface{}) (*CategoryQuestion, error)
-	FindByCategoryId(db *sql.DB, CategoryId interface{}) ([]*CategoryQuestion, error)
+	FindOneByCategoryId(db *sql.DB, categoryId interface{}) (*CategoryQuestion, error)
+	FindByCategoryId(db *sql.DB, categoryId interface{}) ([]*CategoryQuestion, error)
 }
 
 func (m *CategoryQuestion) Get(db *sql.DB, id uint64) (*CategoryQuestion, error) {

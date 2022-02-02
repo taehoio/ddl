@@ -35,6 +35,21 @@ func (m *MockCategoryRecorder) EXPECT() *MockCategoryRecorderMockRecorder {
 	return m.recorder
 }
 
+// FindByIDs mocks base method.
+func (m *MockCategoryRecorder) FindByIDs(db *sql.DB, ids []uint64) ([]*Category, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindByIDs", db, ids)
+	ret0, _ := ret[0].([]*Category)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindByIDs indicates an expected call of FindByIDs.
+func (mr *MockCategoryRecorderMockRecorder) FindByIDs(db, ids interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByIDs", reflect.TypeOf((*MockCategoryRecorder)(nil).FindByIDs), db, ids)
+}
+
 // Get mocks base method.
 func (m *MockCategoryRecorder) Get(db *sql.DB, id uint64) (*Category, error) {
 	m.ctrl.T.Helper()

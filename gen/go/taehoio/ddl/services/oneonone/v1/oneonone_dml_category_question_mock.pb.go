@@ -36,33 +36,48 @@ func (m *MockCategoryQuestionRecorder) EXPECT() *MockCategoryQuestionRecorderMoc
 }
 
 // FindByCategoryId mocks base method.
-func (m *MockCategoryQuestionRecorder) FindByCategoryId(db *sql.DB, CategoryId interface{}) ([]*CategoryQuestion, error) {
+func (m *MockCategoryQuestionRecorder) FindByCategoryId(db *sql.DB, categoryId interface{}) ([]*CategoryQuestion, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByCategoryId", db, CategoryId)
+	ret := m.ctrl.Call(m, "FindByCategoryId", db, categoryId)
 	ret0, _ := ret[0].([]*CategoryQuestion)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindByCategoryId indicates an expected call of FindByCategoryId.
-func (mr *MockCategoryQuestionRecorderMockRecorder) FindByCategoryId(db, CategoryId interface{}) *gomock.Call {
+func (mr *MockCategoryQuestionRecorderMockRecorder) FindByCategoryId(db, categoryId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByCategoryId", reflect.TypeOf((*MockCategoryQuestionRecorder)(nil).FindByCategoryId), db, CategoryId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByCategoryId", reflect.TypeOf((*MockCategoryQuestionRecorder)(nil).FindByCategoryId), db, categoryId)
+}
+
+// FindByIDs mocks base method.
+func (m *MockCategoryQuestionRecorder) FindByIDs(db *sql.DB, ids []uint64) ([]*CategoryQuestion, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindByIDs", db, ids)
+	ret0, _ := ret[0].([]*CategoryQuestion)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindByIDs indicates an expected call of FindByIDs.
+func (mr *MockCategoryQuestionRecorderMockRecorder) FindByIDs(db, ids interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByIDs", reflect.TypeOf((*MockCategoryQuestionRecorder)(nil).FindByIDs), db, ids)
 }
 
 // FindOneByCategoryId mocks base method.
-func (m *MockCategoryQuestionRecorder) FindOneByCategoryId(db *sql.DB, CategoryId interface{}) (*CategoryQuestion, error) {
+func (m *MockCategoryQuestionRecorder) FindOneByCategoryId(db *sql.DB, categoryId interface{}) (*CategoryQuestion, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOneByCategoryId", db, CategoryId)
+	ret := m.ctrl.Call(m, "FindOneByCategoryId", db, categoryId)
 	ret0, _ := ret[0].(*CategoryQuestion)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindOneByCategoryId indicates an expected call of FindOneByCategoryId.
-func (mr *MockCategoryQuestionRecorderMockRecorder) FindOneByCategoryId(db, CategoryId interface{}) *gomock.Call {
+func (mr *MockCategoryQuestionRecorderMockRecorder) FindOneByCategoryId(db, categoryId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOneByCategoryId", reflect.TypeOf((*MockCategoryQuestionRecorder)(nil).FindOneByCategoryId), db, CategoryId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOneByCategoryId", reflect.TypeOf((*MockCategoryQuestionRecorder)(nil).FindOneByCategoryId), db, categoryId)
 }
 
 // Get mocks base method.

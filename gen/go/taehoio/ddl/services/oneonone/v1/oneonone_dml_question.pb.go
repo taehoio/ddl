@@ -43,6 +43,7 @@ var (
 type QuestionRecorder interface {
 	Get(db *sql.DB, id uint64) (*Question, error)
 	List(db *sql.DB, lastID *wrapperspb.UInt64Value, asc bool, limit int64) ([]*Question, error)
+	FindByIDs(db *sql.DB, ids []uint64) ([]*Question, error)
 	Save(db *sql.DB) error
 }
 

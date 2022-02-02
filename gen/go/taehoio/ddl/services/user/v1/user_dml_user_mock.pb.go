@@ -35,34 +35,49 @@ func (m *MockUserRecorder) EXPECT() *MockUserRecorderMockRecorder {
 	return m.recorder
 }
 
-// FindByProviderAndIdentifier mocks base method.
-func (m *MockUserRecorder) FindByProviderAndIdentifier(db *sql.DB, Provider, Identifier interface{}) ([]*User, error) {
+// FindByIDs mocks base method.
+func (m *MockUserRecorder) FindByIDs(db *sql.DB, ids []uint64) ([]*User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByProviderAndIdentifier", db, Provider, Identifier)
+	ret := m.ctrl.Call(m, "FindByIDs", db, ids)
+	ret0, _ := ret[0].([]*User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindByIDs indicates an expected call of FindByIDs.
+func (mr *MockUserRecorderMockRecorder) FindByIDs(db, ids interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByIDs", reflect.TypeOf((*MockUserRecorder)(nil).FindByIDs), db, ids)
+}
+
+// FindByProviderAndIdentifier mocks base method.
+func (m *MockUserRecorder) FindByProviderAndIdentifier(db *sql.DB, provider, identifier interface{}) ([]*User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindByProviderAndIdentifier", db, provider, identifier)
 	ret0, _ := ret[0].([]*User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindByProviderAndIdentifier indicates an expected call of FindByProviderAndIdentifier.
-func (mr *MockUserRecorderMockRecorder) FindByProviderAndIdentifier(db, Provider, Identifier interface{}) *gomock.Call {
+func (mr *MockUserRecorderMockRecorder) FindByProviderAndIdentifier(db, provider, identifier interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByProviderAndIdentifier", reflect.TypeOf((*MockUserRecorder)(nil).FindByProviderAndIdentifier), db, Provider, Identifier)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByProviderAndIdentifier", reflect.TypeOf((*MockUserRecorder)(nil).FindByProviderAndIdentifier), db, provider, identifier)
 }
 
 // FindOneByProviderAndIdentifier mocks base method.
-func (m *MockUserRecorder) FindOneByProviderAndIdentifier(db *sql.DB, Provider, Identifier interface{}) (*User, error) {
+func (m *MockUserRecorder) FindOneByProviderAndIdentifier(db *sql.DB, provider, identifier interface{}) (*User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOneByProviderAndIdentifier", db, Provider, Identifier)
+	ret := m.ctrl.Call(m, "FindOneByProviderAndIdentifier", db, provider, identifier)
 	ret0, _ := ret[0].(*User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindOneByProviderAndIdentifier indicates an expected call of FindOneByProviderAndIdentifier.
-func (mr *MockUserRecorderMockRecorder) FindOneByProviderAndIdentifier(db, Provider, Identifier interface{}) *gomock.Call {
+func (mr *MockUserRecorderMockRecorder) FindOneByProviderAndIdentifier(db, provider, identifier interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOneByProviderAndIdentifier", reflect.TypeOf((*MockUserRecorder)(nil).FindOneByProviderAndIdentifier), db, Provider, Identifier)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOneByProviderAndIdentifier", reflect.TypeOf((*MockUserRecorder)(nil).FindOneByProviderAndIdentifier), db, provider, identifier)
 }
 
 // Get mocks base method.
